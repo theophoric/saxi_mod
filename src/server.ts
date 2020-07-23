@@ -200,7 +200,7 @@ export function startServer(port: number, device: string | null = null, enableCo
   }
 
   return new Promise((resolve) => {
-    server.listen(port, () => {
+    server.listen(port, "0.0.0.0", () => {
       async function connect() {
         for await (const d of ebbs(device)) {
           ebb = d;
