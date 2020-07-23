@@ -14,6 +14,7 @@ import "./style.css";
 
 import pathJoinRadiusIcon from "./icons/path-joining radius.svg";
 import pointJoinRadiusIcon from "./icons/point-joining radius.svg";
+import { readFile } from "fs";
 
 const defaultPlanOptions: PlanOptions = {
   penUpHeight: 50,
@@ -826,11 +827,27 @@ function Root({driver}: {driver: Driver}) {
         dispatch(setPaths(readSvg(s)));
       });
     };
+    const onFileSelect = (e: Event) => {
+
+      const file = (e.target as HTMLInputElement).files[0];
+      if (!file) {
+        e.preventDefault();
+        return
+      }
+      const reader = new FileReader();
+      reader.onload = () => {
+        dispatch(setPaths(readSvg(reader.result as string)));
+        document.body.classList.remove("dragover");
+      }
+      reader.readAsText(file)
+    }
+    document.getElementById("svg-select").addEventListener("change", onFileSelect);
     document.body.addEventListener("drop", ondrop);
     document.body.addEventListener("dragover", ondragover);
     document.body.addEventListener("dragleave", ondragleave);
     document.addEventListener("paste", onpaste);
     return () => {
+      document.getElementById("svg-select").removeEventListener("change", onFileSelect);
       document.body.removeEventListener("drop", ondrop);
       document.body.removeEventListener("dragover", ondragover);
       document.body.removeEventListener("dragleave", ondragleave);
@@ -847,7 +864,12 @@ function Root({driver}: {driver: Driver}) {
           <span className="red reg">s</span><span className="teal">axi</span>
         </div>
         {!state.connected ? <div className="info-disconnected">disconnected</div> : null}
+        <div className="section-header">file</div>
+        <div className="section-body">
+          <SVGSelect />
+        </div>
         <div className="section-header">pen</div>
+
         <div className="section-body">
           <PenHeight state={state} driver={driver} />
           <MotorControl driver={driver} />
@@ -879,10 +901,17 @@ function Root({driver}: {driver: Driver}) {
           previewSize={{width: Math.max(0, previewSize.width - 40), height: Math.max(0, previewSize.height - 40)}}
           plan={plan}
         />
-        {plan ? null : <DragTarget/>}
+        {plan ? null : <DragTarget />}
       </div>
+
     </div>
   </DispatchContext.Provider>;
+}
+
+function SVGSelect() {
+  return <form className="svg-select">
+      <input id="svg-select" type="file" accept=".svg" ></input>
+    </form>
 }
 
 function DragTarget() {

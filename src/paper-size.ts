@@ -33,8 +33,15 @@ export class PaperSize {
     "A5": new PaperSize({x: 148, y: 210}),
     "A6": new PaperSize({x: 105, y: 148}),
     "6x8": new PaperSize(vround(vmul({x: 6, y: 8}, 25.4))),
+    "6x9": new PaperSize(vround(vmul({x: 6, y: 9}, 25.4))),
     "5x7": new PaperSize(vround(vmul({x: 5, y: 7}, 25.4))),
+    "3.5x5.25": new PaperSize(vround(vmul({x: 3.5, y: 5.25}, 25.4))),
+    "12x12": new PaperSize(vround(vmul({x: 12, y: 12}, 25.4))),
+    "12x18": new PaperSize(vround(vmul({x: 12, y: 18}, 25.4))),
+    "3x4.5": new PaperSize(vround(vmul({x: 3, y: 4.5}, 25.4))),
+    "MessageCard": new PaperSize({x:55, y:91}),
   };
+  
   public size: Vec2;
   public constructor(size: Vec2) {
     this.size = size;

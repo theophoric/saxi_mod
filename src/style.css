@@ -255,6 +255,10 @@ select[multiple]:focus option:checked {
   color: white;
 }
 
+.svg-select {
+  overflow-x:hidden;
+}
+
 .flex button,
 .flex label {
   width: calc(50% - 0.25rem);
