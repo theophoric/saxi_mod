@@ -14,7 +14,6 @@ import "./style.css";
 
 import pathJoinRadiusIcon from "./icons/path-joining radius.svg";
 import pointJoinRadiusIcon from "./icons/point-joining radius.svg";
-import { readFile } from "fs";
 
 const defaultPlanOptions: PlanOptions = {
   penUpHeight: 50,
