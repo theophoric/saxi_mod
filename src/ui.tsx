@@ -909,8 +909,8 @@ function Root({driver}: {driver: Driver}) {
 
 function SVGSelect() {
   return <form className="svg-select">
-      <input id="svg-select" type="file" accept=".svg" ></input>
-    </form>
+    <input id="svg-select" type="file" accept=".svg" ></input>
+  </form>
 }
 
 function DragTarget() {
