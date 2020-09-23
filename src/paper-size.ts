@@ -35,11 +35,15 @@ export class PaperSize {
     "6x8": new PaperSize(vround(vmul({x: 6, y: 8}, 25.4))),
     "6x9": new PaperSize(vround(vmul({x: 6, y: 9}, 25.4))),
     "5x7": new PaperSize(vround(vmul({x: 5, y: 7}, 25.4))),
-    "3.5x5.25": new PaperSize(vround(vmul({x: 3.5, y: 5.25}, 25.4))),
-    "3.5x3.5": new PaperSize(vround(vmul({x: 3.5, y: 3.5}, 25.4))),
     "12x12": new PaperSize(vround(vmul({x: 12, y: 12}, 25.4))),
     "12x18": new PaperSize(vround(vmul({x: 12, y: 18}, 25.4))),
+    
+    "3.5x5.25": new PaperSize(vround(vmul({ x: 3.5, y: 5.25 }, 25.4))),
+    "3.5x3.5": new PaperSize(vround(vmul({x: 3.5, y: 3.5}, 25.4))),
     "3x4.5": new PaperSize(vround(vmul({x: 3, y: 4.5}, 25.4))),
+    "2x3 (rect. sticker)": new PaperSize(vround(vmul({x: 2, y: 3}, 25.4))),
+    "2x2 (circ. sticker)": new PaperSize(vround(vmul({x: 2, y: 2}, 25.4))),
+    
     "MessageCard": new PaperSize({x:55, y:91}),
   };
   
