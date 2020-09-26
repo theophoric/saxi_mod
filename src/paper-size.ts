@@ -43,6 +43,8 @@ export class PaperSize {
     "3x4.5": new PaperSize(vround(vmul({x: 3, y: 4.5}, 25.4))),
     "2x3 (rect. sticker)": new PaperSize(vround(vmul({x: 2, y: 3}, 25.4))),
     "2x2 (circ. sticker)": new PaperSize(vround(vmul({x: 2, y: 2}, 25.4))),
+
+    "Eggshell Sticker": new PaperSize({x:65, y: 100}),
     
     "MessageCard": new PaperSize({x:55, y:91}),
   };
