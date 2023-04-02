@@ -32,9 +32,24 @@ export class PaperSize {
     "A4": new PaperSize({x: 210, y: 297}),
     "A5": new PaperSize({x: 148, y: 210}),
     "A6": new PaperSize({x: 105, y: 148}),
+    "Eggshell Classic": new PaperSize({x: 100, y: 60}),
+    "Eggshell Holo": new PaperSize({x: 100, y: 70}),
+    "3x2": new PaperSize(vround(vmul({x: 3, y: 2}, 25.4))),
+    "3x3": new PaperSize(vround(vmul({x: 3, y: 3}, 25.4))),
+    "3x5": new PaperSize(vround(vmul({x: 3, y: 5}, 25.4))),
+    "4x6": new PaperSize(vround(vmul({x: 4, y: 6}, 25.4))),
+    "6x6": new PaperSize(vround(vmul({x: 6, y: 6}, 25.4))),
     "6x8": new PaperSize(vround(vmul({x: 6, y: 8}, 25.4))),
+    "8x8": new PaperSize(vround(vmul({x: 8, y: 8}, 25.4))),
     "5x7": new PaperSize(vround(vmul({x: 5, y: 7}, 25.4))),
-    "11x14": new PaperSize(vround(vmul({x: 11, y: 14}, 25.4))),
+    "12x6": new PaperSize(vround(vmul({x: 12, y: 6}, 25.4))),
+    "12x9": new PaperSize(vround(vmul({x: 12, y: 9}, 25.4))),
+    "12x12": new PaperSize(vround(vmul({x: 12, y: 12}, 25.4))),
+    "14x11": new PaperSize(vround(vmul({x: 14, y: 11}, 25.4))),
+    "17x11": new PaperSize(vround(vmul({x: 17, y: 11}, 25.4))),
+    "18x14": new PaperSize(vround(vmul({x: 18, y: 14}, 25.4))),
+    "19x12.5": new PaperSize(vround(vmul({x: 19, y: 12.5}, 25.4))),
+    
   };
   public size: Vec2;
   public constructor(size: Vec2) {
