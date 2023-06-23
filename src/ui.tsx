@@ -167,7 +167,7 @@ class WebSerialDriver implements Driver {
     }
 
     if (this._cancelRequested) {
-      await this.ebb.setPenHeight(Device.Axidraw.penPctToPos(0), 1000);
+      await this.ebb.setPenHeight(Device.Axidraw.penPctToPos(50), 1000);
       if (this.oncancelled) this.oncancelled()
     } else {
       if (this.onfinished) this.onfinished()
