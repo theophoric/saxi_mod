@@ -156,7 +156,7 @@ export class EBB {
   }
 
   public setPenHeight(height: number, rate: number, delay: number = 0): Promise<void> {
-    return this.command(`S2,${height},4,${rate},${delay}`);
+    return this.command(`S2,${height},5,${rate},${delay}`);
   }
 
   public lowlevelMove(

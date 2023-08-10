@@ -46,6 +46,7 @@ export class PaperSize {
     "12x6": new PaperSize(vround(vmul({x: 12, y: 6}, 25.4))),
     "12x9": new PaperSize(vround(vmul({x: 12, y: 9}, 25.4))),
     "12x12": new PaperSize(vround(vmul({x: 12, y: 12}, 25.4))),
+    "12x16": new PaperSize(vround(vmul({x: 12, y: 16}, 25.4))),
     "14x11": new PaperSize(vround(vmul({x: 14, y: 11}, 25.4))),
     "17x11": new PaperSize(vround(vmul({x: 17, y: 11}, 25.4))),
     "18x14": new PaperSize(vround(vmul({x: 18, y: 14}, 25.4))),

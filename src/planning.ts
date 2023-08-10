@@ -53,8 +53,8 @@ export const defaultPlanOptions: PlanOptions = {
   penUpAcceleration: 400,
   penUpMaxVelocity: 200,
 
-  penDropDuration: 0.12,
-  penLiftDuration: 0.12,
+  penDropDuration: 0.08,
+  penLiftDuration: 0.08,
 
   sortPaths: true,
   rotateDrawing: 0,
@@ -94,8 +94,8 @@ export const Device = {
     // Practical min/max that you might ever want the pen servo to go on the AxiDraw (v2)
     // Units: 83ns resolution pwm output.
     // Defaults: penup at 12000 (1ms), pendown at 16000 (1.33ms).
-    penServoMin: 7500,  // pen down
-    penServoMax: 28000, // pen up
+    penServoMin: 5400,  // pen down
+    penServoMax: 12600, // pen up
 
     penPctToPos(pct: number): number {
       const t = pct / 100.0;
