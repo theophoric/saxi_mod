@@ -191,7 +191,7 @@ export class PenMotion implements Motion {
     this.pDuration = duration;
   }
 
-  public duration(): number {
+  public duration(): number { 
     return this.pDuration;
   }
 
@@ -578,6 +578,7 @@ export function plan(
     curPos = m.p2;
   });
   // finally, move back to (0, 0).
+  // motions.push(constantAccelerationPlan([curPos, {x: 0, y: 0}], profile.penUpProfile));
   motions.push(constantAccelerationPlan([curPos, {x: 0, y: 0}], profile.penUpProfile));
   motions.push(new PenMotion(Device.Axidraw.penPctToPos(penMaxUpPos), profile.penUpPos, profile.penDropDuration));
   return new Plan(motions);

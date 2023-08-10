@@ -160,7 +160,7 @@ export function startServer(port: number, device: string | null = null, enableCo
       await ebb.executeMotion(motion);
     },
     async postCancel(): Promise<void> {
-      await ebb.setPenHeight(Device.Axidraw.penPctToPos(0), 1000);
+      await ebb.setPenHeight(Device.Axidraw.penPctToPos(50), 1000);
     },
     async postPlot(): Promise<void> {
       await ebb.waitUntilMotorsIdle();
