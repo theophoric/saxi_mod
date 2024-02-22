@@ -95,6 +95,9 @@ export class SerialPortSerialPort extends EventEmitter implements SerialPort {
   public getInfo(): SerialPortInfo {
     throw new Error("Method not implemented.");
   }
+  public forget(): Promise<void> {
+    throw new Error("Method not implemented.");
+  }
   public close(): Promise<void> {
     return new Promise((resolve, reject) => {
       this._port.close((err: Error) => {

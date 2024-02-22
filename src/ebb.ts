@@ -155,7 +155,7 @@ export class EBB {
     await this.command(`SR,${(timeout * 1000) | 0}${power != null ? `,${power ? 1 : 0}` : ''}`)
   }
 
-  public setPenHeight(height: number, rate: number, delay: number = 0): Promise<void> {
+  public setPenHeight(height: number, rate: number, delay = 0): Promise<void> {
     return this.command(`S2,${height},5,${rate},${delay}`);
   }
 
