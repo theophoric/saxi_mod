@@ -63,7 +63,7 @@ export function replan(inPaths: Vec2[][], planOptions: PlanOptions): Plan {
   
   if (planOptions.maximumPathLength < defaultPlanOptions.maximumPathLength) {
     console.time("eliding long paths");
-    paths = Optimization.elideShorterThan(paths, planOptions.maximumPathLength);
+    paths = Optimization.elideLongerThan(paths, planOptions.maximumPathLength);
     console.timeEnd("eliding long paths");
   }
 
