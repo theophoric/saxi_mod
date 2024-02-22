@@ -1,6 +1,6 @@
 import * as Optimization from "optimize-paths";
 import * as Planning from "./planning";
-import {Device, Plan, PlanOptions} from "./planning";
+import {Device, Plan, PlanOptions, defaultPlanOptions} from "./planning";
 import {dedupPoints, scaleToPaper, cropToMargins} from "./util";
 import {Vec2, vmul, vrot} from "./vec";
 
@@ -55,10 +55,16 @@ export function replan(inPaths: Vec2[][], planOptions: PlanOptions): Plan {
     console.timeEnd("sorting paths");
   }
 
-  if (planOptions.minimumPathLength > 0) {
+  if (planOptions.minimumPathLength > ) {
     console.time("eliding short paths");
     paths = Optimization.elideShorterThan(paths, planOptions.minimumPathLength);
     console.timeEnd("eliding short paths");
+  }
+  
+  if (planOptions.maximumPathLength < defaultPlanOptions.maximumPathLength) {
+    console.time("eliding long paths");
+    paths = Optimization.elideShorterThan(paths, planOptions.maximumPathLength);
+    console.timeEnd("eliding long paths");
   }
 
   if (planOptions.pathJoinRadius > 0) {

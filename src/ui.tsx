@@ -923,6 +923,16 @@ function PlanOptions({state}: {state: State}) {
           onChange={(e) => dispatch({type: "SET_PLAN_OPTION", value: {minimumPathLength: Number(e.target.value)}})}
         />
       </label>
+      <label title="Remove paths that are longer than this length (in mm)">
+        maximum path length
+        <input
+          type="number"
+          value={state.planOptions.maximumPathLength}
+          step="0.1"
+          min="0"
+          onChange={(e) => dispatch({type: "SET_PLAN_OPTION", value: {maximumPathLength: Number(e.target.value)}})}
+        />
+      </label>
       <div className="flex">
         <label title="Acceleration when the pen is down (in mm/s^2)">
           down acc. (mm/s<sup>2</sup>)

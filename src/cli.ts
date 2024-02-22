@@ -169,6 +169,11 @@ export function cli(argv: string[]): void {
           type: "number",
           default: defaultPlanOptions.minimumPathLength
         })
+        .option("maximum-path-length", {
+          describe: "Remove paths that are longer than this length (in mm)",
+          type: "number",
+          default: defaultPlanOptions.maximumPathLength
+        })
         .option("point-join-radius", {
           describe: "Point-joining radius (in mm)",
           type: "number",
@@ -228,6 +233,7 @@ export function cli(argv: string[]): void {
           rotateDrawing: args["rotate-drawing"],
 
           minimumPathLength: args["minimum-path-length"],
+          maximumPathLength: args["maximum-path-length"],
           pathJoinRadius: args["path-join-radius"],
           pointJoinRadius: args["point-join-radius"],
         }
