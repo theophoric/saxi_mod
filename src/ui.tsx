@@ -1,8 +1,8 @@
 import useComponentSize from "@rehooks/component-size";
 import React, { ChangeEvent, Fragment, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState, useReducer } from "react";
-import ReactDOM from "react-dom";
-import * as interpolator from "color-interpolate"
-import * as colormap from "colormap"
+import { createRoot } from 'react-dom/client';
+import interpolator from "color-interpolate"
+import colormap from "colormap"
 
 import {flattenSVG} from "flatten-svg";
 import {PaperSize} from "./paper-size";
@@ -67,6 +67,7 @@ function reducer(state: State, action: any): State {
     case "SET_PAUSED":
       return {...state, paused: action.value};
     case "SET_PATHS":
+      // eslint-disable-next-line no-case-declarations
       const {paths, strokeLayers, selectedStrokeLayers, groupLayers, selectedGroupLayers, layerMode} = action;
       return {...state, paths, groupLayers, strokeLayers, planOptions: {...state.planOptions, selectedStrokeLayers, selectedGroupLayers, layerMode}};
     case "SET_PROGRESS":
@@ -115,7 +116,7 @@ class WebSerialDriver implements Driver {
 
   private _unpaused: Promise<void> = null;
   private _signalUnpause: () => void = null;
-  private _cancelRequested: boolean = false;
+  private _cancelRequested = false;
 
   public static async connect(port?: SerialPort) {
     if (!port)
@@ -239,7 +240,7 @@ class SaxiDriver implements Driver {
 
     const websocketProtocol = document.location.protocol === "https:" ? "wss" : "ws";
     this.socket = new WebSocket(`${websocketProtocol}://${document.location.host}/chat`);
-    
+
     this.socket.addEventListener("open", () => {
       console.log(`Connected to EBB server.`);
       this.connected = true;
@@ -249,46 +250,44 @@ class SaxiDriver implements Driver {
       this.pingInterval = window.setInterval(() => this.ping(), 30000);
     });
     this.socket.addEventListener("message", (e: MessageEvent) => {
-      if (typeof e.data === "string") {
-        const msg = JSON.parse(e.data);
-        switch (msg.c) {
-          case "pong": {
-            // nothing
-          } break;
-          case "progress": {
-            if (this.onprogress != null) {
-              this.onprogress(msg.p.motionIdx);
-            }
-          } break;
-          case "cancelled": {
-            if (this.oncancelled != null) {
-              this.oncancelled();
-            }
-          } break;
-          case "finished": {
-            if (this.onfinished != null) {
-              this.onfinished();
-            }
-          } break;
-          case "dev": {
-            if (this.ondevinfo != null) {
-              this.ondevinfo(msg.p);
-            }
-          } break;
-          case "pause": {
-            if (this.onpause != null) {
-              this.onpause(msg.p.paused)
-            }
-          } break;
-          case "plan": {
-            if (this.onplan != null) {
-              this.onplan(Plan.deserialize(msg.p.plan))
-            }
-          } break;
-          default: {
-            console.log("Unknown message from server:", msg);
-          } break;
-        }
+      const msg = JSON.parse(e.data);
+      switch (msg.c) {
+        case "pong": {
+          // nothing
+        } break;
+        case "progress": {
+          if (this.onprogress != null) {
+            this.onprogress(msg.p.motionIdx);
+          }
+        } break;
+        case "cancelled": {
+          if (this.oncancelled != null) {
+            this.oncancelled();
+          }
+        } break;
+        case "finished": {
+          if (this.onfinished != null) {
+            this.onfinished();
+          }
+        } break;
+        case "dev": {
+          if (this.ondevinfo != null) {
+            this.ondevinfo(msg.p);
+          }
+        } break;
+        case "pause": {
+          if (this.onpause != null) {
+            this.onpause(msg.p.paused)
+          }
+        } break;
+        case "plan": {
+          if (this.onplan != null) {
+            this.onplan(Plan.deserialize(msg.p.plan))
+          }
+        } break;
+        default: {
+          console.log("Unknown message from server:", msg);
+        } break;
       }
     });
     this.socket.addEventListener("error", () => {
@@ -558,7 +557,7 @@ function PaperConfig({state}: {state: State}) {
           <img src={rotateDrawingIcon} alt="rotate drawing (degrees)"/>
           <input type="number" min="-90" step="90" max="360" placeholder="0" value={state.planOptions.rotateDrawing}
             onInput={(e) => {
-              let value = (e.target as HTMLInputElement).value;
+              const value = (e.target as HTMLInputElement).value;
               if (Number(value) < 0) { (e.target as HTMLInputElement).value = "270"; }
               if (Number(value) > 270) { (e.target as HTMLInputElement).value = "0"; }
             }}
@@ -782,6 +781,7 @@ function LayerSelector({state}: {state: State}) {
         value={[...selectedLayers]}
         onChange={layersChanged}
         size={3}
+        disabled={state.progress != null}
       >
         {layers.map((layer) => <option key={layer}>{layer}</option>)}
       </select>
@@ -855,40 +855,42 @@ function ResetToDefaultsButton() {
 function PlanOptions({state}: {state: State}) {
   const dispatch = useContext(DispatchContext);
   return <div>
-    <label className="flex-checkbox" title="Re-order paths to minimize pen-up travel time">
-      <input
-        type="checkbox"
-        checked={state.planOptions.sortPaths}
-        onChange={(e) => dispatch({type: "SET_PLAN_OPTION", value: {sortPaths: !!e.target.checked}})}
-      />
-      sort paths
-    </label>
-    <label className="flex-checkbox" title="Re-scale and position the image to fit on the page">
-      <input
-        type="checkbox"
-        checked={state.planOptions.fitPage}
-        onChange={(e) => dispatch({type: "SET_PLAN_OPTION", value: {fitPage: !!e.target.checked}})}
-      />
-      fit page
-    </label>
-    {!state.planOptions.fitPage ?
-      <label className="flex-checkbox" title="Remove lines that fall outside the margins">
+    <form>
+      <label className="flex-checkbox" title="Re-order paths to minimize pen-up travel time">
         <input
           type="checkbox"
-          checked={state.planOptions.cropToMargins}
-          onChange={(e) => dispatch({type: "SET_PLAN_OPTION", value: {cropToMargins: !!e.target.checked}})}
+          checked={state.planOptions.sortPaths}
+          onChange={(e) => dispatch({type: "SET_PLAN_OPTION", value: {sortPaths: !!e.target.checked}})}
         />
-        crop to margins
+        sort paths
       </label>
-      : null}
-    <label className="flex-checkbox" title="Split into layers according to group ID, instead of stroke">
-      <input
-        type="checkbox"
-        checked={state.planOptions.layerMode === 'group'}
-        onChange={(e) => dispatch({type: "SET_PLAN_OPTION", value: {layerMode: e.target.checked ? 'group' : 'stroke'}})}
-      />
-      layer by group
-    </label>
+      <label className="flex-checkbox" title="Split into layers according to group ID, instead of stroke">
+        <input
+          type="checkbox"
+          checked={state.planOptions.layerMode === 'group'}
+          onChange={(e) => dispatch({type: "SET_PLAN_OPTION", value: {layerMode: e.target.checked ? 'group' : 'stroke'}})}
+        />
+        layer by group
+      </label>
+      <label className="flex-checkbox" title="Re-scale and position the image to fit on the page">
+        <input
+          type="checkbox"
+          checked={state.planOptions.fitPage}
+          onChange={(e) => dispatch({type: "SET_PLAN_OPTION", value: {fitPage: !!e.target.checked}})}
+        />
+        fit page
+      </label>
+      {!state.planOptions.fitPage ?
+        <label className="flex-checkbox" title="Remove lines that fall outside the margins">
+          <input
+            type="checkbox"
+            checked={state.planOptions.cropToMargins}
+            onChange={(e) => dispatch({type: "SET_PLAN_OPTION", value: {cropToMargins: !!e.target.checked}})}
+          />
+          crop to margins
+        </label>
+        : null}
+    </form>
     <div className="horizontal-labels">
 
       <label title="point-joining radius (mm)" >
@@ -1054,9 +1056,18 @@ function PortSelector({driver, setDriver}: {driver: Driver; setDriver: (d: Drive
 }
 
 function Root() {
-  const [driver, setDriver] = useState(
-    IS_WEB ? null as Driver | null : SaxiDriver.connect()
-  )
+  const [driver, setDriver] = useState<Driver | null>(null);
+  const [isDriverConnected, setIsDriverConnected] = useState(false);
+  useEffect(() => {
+    if (isDriverConnected) return
+    if (IS_WEB) {
+      setDriver(null as Driver);
+    } else {
+      setDriver(SaxiDriver.connect());
+    }
+    setIsDriverConnected(true);
+  }, [isDriverConnected]);
+
   const [state, dispatch] = useReducer(reducer, initialState);
   const [isPlanning, plan, setPlan] = usePlan(state.paths, state.planOptions);
   const [isLoadingFile, setIsLoadingFile] = useState(false);
@@ -1128,7 +1139,7 @@ function Root() {
       document.body.removeEventListener("dragleave", ondragleave);
       document.removeEventListener("paste", onpaste);
     };
-  });
+  }, []);
 
   // Each time new motion is started, save the start time
   const currentMotionStartedTime = useMemo(() => {
@@ -1201,7 +1212,8 @@ function DragTarget() {
   </div>;
 }
 
-ReactDOM.render(<Root />, document.getElementById("app"));
+// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+createRoot(document.getElementById("app")!).render(<Root />);
 
 function withSVG<T>(svgString: string, fn: (svg: SVGSVGElement) => T): T {
   const div = document.createElement("div");

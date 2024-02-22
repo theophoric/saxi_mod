@@ -15,7 +15,7 @@ export class EBB {
   private writer: WritableStreamDefaultWriter<Uint8Array>;
   private readableClosed: Promise<void>
 
-  private microsteppingMode: number = 0;
+  private microsteppingMode = 0;
 
   /** Accumulated XY error, used to correct for movements with sub-step resolution */
   private error: Vec2 = {x: 0, y: 0};
@@ -24,7 +24,7 @@ export class EBB {
 
   public constructor(port: SerialPort) {
     this.port = port;
-    this.writer = this.port.writable.getWriter()
+    this.writer = this.port.writable.getWriter();
     this.commandQueue = [];
     this.readableClosed = port.readable
       .pipeThrough(new RegexParser({ regex: /[\r\n]+/ }))
@@ -66,7 +66,7 @@ export class EBB {
   }
 
   public async close(): Promise<void> {
-    throw new Error("TODO")
+    return await this.port.close()
   }
 
   private write(str: string): Promise<void> {
@@ -221,6 +221,7 @@ export class EBB {
   }
 
   public async waitUntilMotorsIdle(): Promise<void> {
+    // eslint-disable-next-line no-constant-condition
     while (true) {
       const [, commandStatus, _motor1Status, _motor2Status, fifoStatus] = (await this.query("QM")).split(",");
       if (commandStatus === "0" && fifoStatus === "0") {
@@ -260,7 +261,7 @@ export class EBB {
    * This is less accurate than using LM, since acceleration will only be adjusted every timestepMs milliseconds,
    * where LM can adjust the acceleration at a much higher rate, as it executes on-board the EBB.
    */
-  public async executeXYMotionWithXM(plan: XYMotion, timestepMs: number = 15): Promise<void> {
+  public async executeXYMotionWithXM(plan: XYMotion, timestepMs = 15): Promise<void> {
     const timestepSec = timestepMs / 1000;
     let t = 0;
     while (t < plan.duration()) {
@@ -310,7 +311,7 @@ export class EBB {
     }
   }
 
-  public async executePlan(plan: Plan, microsteppingMode: number = 2): Promise<void> {
+  public async executePlan(plan: Plan, microsteppingMode = 2): Promise<void> {
     await this.enableMotors(microsteppingMode);
 
     for (const m of plan.motions) {
