@@ -55,7 +55,7 @@ export function replan(inPaths: Vec2[][], planOptions: PlanOptions): Plan {
     console.timeEnd("sorting paths");
   }
 
-  if (planOptions.minimumPathLength > ) {
+  if (planOptions.minimumPathLength > 0) {
     console.time("eliding short paths");
     paths = Optimization.elideShorterThan(paths, planOptions.minimumPathLength);
     console.timeEnd("eliding short paths");
